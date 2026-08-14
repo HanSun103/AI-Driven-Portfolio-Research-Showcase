@@ -91,25 +91,93 @@ toward four concurrent weekly sleeves; a 40-session strategy builds toward
 eight. Capital is divided across active sleeve slots, so each weekly selection
 contributes without being counted as a separate fully invested portfolio.
 
-## Research architecture
+## Architecture
 
 ```mermaid
 flowchart TD
-    DATA["Point-in-time market, universe and news inputs"]
-    AUDIT["Timestamp, coverage and corporate-action audits"]
-    PANEL["Leakage-safe features and exact forward labels"]
-    MODEL["Opportunity, downside and uncertainty estimates"]
-    POLICY["Constrained stock selection and sleeve construction"]
-    REPLAY["Exact execution replay with costs and SPY"]
-    STRESS["Ticker, year, regime, turnover and tail-risk stress tests"]
-    LIVE["Immutable live-forward monitoring"]
-    PILOT["Small real-money execution pilot"]
-    SCALE["Gradual scaling only after operational agreement"]
+    CONTRACT["Experiment contract<br/>universe, dates, horizon, model,<br/>costs, controls and promotion gates"]
 
-    DATA --> AUDIT --> PANEL --> MODEL --> POLICY
-    POLICY --> REPLAY --> STRESS
-    POLICY --> LIVE --> PILOT --> SCALE
+    subgraph TEXT["Text and news ingestion"]
+        LIVE_NEWS["Incremental financial news<br/>RSS, NewsAPI and Alpha Vantage"]
+        HISTORY_NEWS["Historical news archives<br/>selective and resumable imports"]
+        RAW_NEWS["Deduplicated raw-news store<br/>source, ticker and publication time"]
+        NLP["FinBERT pipeline<br/>entity linking, sentiment and events"]
+        CLOCK["Decision-time news clock<br/>close cutoff or next-session availability"]
+
+        LIVE_NEWS --> RAW_NEWS
+        HISTORY_NEWS --> RAW_NEWS
+        RAW_NEWS --> NLP --> CLOCK
+    end
+
+    subgraph MARKET["Market, macro and universe ingestion"]
+        PRICES["Adjusted OHLCV<br/>Yahoo with provider fallbacks"]
+        MACRO["SPY, VIX, rates and regime inputs"]
+        MEMBERS["Point-in-time membership and sectors<br/>lagged liquid top 250"]
+        CACHE["Incremental market cache<br/>fetch only missing history"]
+        PRICE_AUDIT["Corporate-action and price-gap audit<br/>suspicious histories are replaced or rejected"]
+
+        PRICES --> CACHE --> PRICE_AUDIT
+        MACRO --> CACHE
+        MEMBERS --> PRICE_AUDIT
+    end
+
+    subgraph FEATURES["Leakage-safe research panel"]
+        QUANT["Technical, cross-sectional,<br/>sector-relative and macro features"]
+        SENTIMENT["Lagged sentiment, event<br/>and recency features"]
+        LABELS["Exact next-open labels<br/>20-session return and 40-session rank"]
+        STORE["Ticker-date feature store<br/>availability and quality metadata"]
+
+        PRICE_AUDIT --> QUANT --> STORE
+        CLOCK --> SENTIMENT --> STORE
+        PRICE_AUDIT --> LABELS --> STORE
+    end
+
+    subgraph MODELS["Opportunity, risk and portfolio policy"]
+        TEMPORAL["Purged expanding folds<br/>fold-local preprocessing and selection"]
+        RIDGE20["20-session Ridge<br/>continuous-return head"]
+        RIDGE40["40-session Ridge<br/>cross-sectional rank head"]
+        RISK["Downside quantile, severe-loss<br/>and uncertainty diagnostics"]
+        CONTROLLER["Constrained controller<br/>fixed policy remains the benchmark"]
+        SLEEVES["One-stock weekly sleeves<br/>equal capital across active vintages"]
+
+        STORE --> TEMPORAL
+        TEMPORAL --> RIDGE20 --> RISK
+        TEMPORAL --> RIDGE40 --> RISK
+        RISK --> CONTROLLER --> SLEEVES
+    end
+
+    subgraph EVALUATION["Execution, evaluation and controls"]
+        REPLAY["Exact daily replay<br/>next-open entry and scheduled exit"]
+        COSTS["Gross and net accounting<br/>fees, spread, slippage and turnover"]
+        CONTROLS["SPY, eligible universe,<br/>next-rank and sector-matched controls"]
+        STRESS["Ticker removal, year, regime,<br/>drawdown, CVaR and cost stress tests"]
+        LIVE_MONITOR["Immutable live-forward monitor<br/>signals, prices and matured outcomes"]
+        PILOT["Approximately $4,000 pilot<br/>actual fills and operational reconciliation"]
+        SCALE["Gradual scaling gate<br/>behaviour first, profit second"]
+        OUTPUT["Reports, experiment logs<br/>and sanitized research evidence"]
+
+        SLEEVES --> REPLAY --> COSTS --> STRESS --> OUTPUT
+        CONTROLS --> STRESS
+        SLEEVES --> LIVE_MONITOR --> OUTPUT
+        LIVE_MONITOR --> PILOT --> SCALE
+        PILOT --> OUTPUT
+    end
+
+    CONTRACT --> STORE
+    CONTRACT --> TEMPORAL
+    CONTRACT --> REPLAY
+    CONTRACT --> LIVE_MONITOR
 ```
+
+| Module | Responsibility |
+|---|---|
+| Market and news ingestion | Refresh adjusted prices and timestamped news; retain effective-dated membership, sector and source metadata |
+| Data integrity | Audit freshness, corporate actions, missing histories, decision-time availability and survivorship controls |
+| Leakage-safe research panel | Build the lagged liquid universe, features and exact next-open horizon labels |
+| Model development | Run purged temporal folds, fold-local preprocessing and feature selection, training-only early stopping and Optuna TPE |
+| Portfolio construction | Convert frozen scores into holdings while tracking exposure, liquidity, turnover, downside and uncertainty |
+| Execution replay | Apply exact entry timing, overlapping sleeves, costs, cash and schedule-matched SPY |
+| Monitoring and evidence | Preserve immutable forecasts, mature outcomes without look-ahead and publish sanitized diagnostics |
 
 The implementation, production configuration, trained models, data, current
 selections and live execution records are intentionally private.
