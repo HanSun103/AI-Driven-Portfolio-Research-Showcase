@@ -192,15 +192,9 @@ selections and live execution records are intentionally private.
 |---|---|
 | ![Horizon attribution](assets/horizon_attribution.svg) | ![Tail-control diagnostics](assets/tail_control_diagnostics.svg) |
 
-| Feature-selection stability and signed importance |
-|---|
-| ![Ridge feature-selection stability and signed final-model coefficients](assets/ridge_feature_evidence.svg) |
-
 These figures use the frozen 20-session Ridge-return finalist that produced a
 34.84% gross CAGR. Signal diagnostics use temporal out-of-sample predictions;
-portfolio charts use exact daily overlapping-sleeve accounting. The feature
-chart reports fold stability and final-model coefficients, not historical
-out-of-sample SHAP.
+portfolio charts use exact daily overlapping-sleeve accounting.
 
 ## From research to capital
 
