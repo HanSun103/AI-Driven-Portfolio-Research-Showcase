@@ -184,14 +184,13 @@ selections and live execution records are intentionally private.
 
 ## Evidence gallery
 
-| Interim finalist replay | Dominant-ticker stress test |
+| Portfolio and execution diagnostics | Signal diagnostics |
 |---|---|
-| ![20-session, 40-session and SPY declared-cost backtest summary](assets/horizon_finalist_backtest.svg) | ![Top-one concentration stress test](assets/concentration_stress.svg) |
+| ![Backtest and execution diagnostics](assets/backtest_diagnostics.svg) | ![Signal diagnostics](assets/signal_diagnostics.svg) |
 
-The finalist replay reports the strongest candidate's 31.23% declared-cost
-net CAGR alongside the 40-session candidate and SPY. It remains interim
-development evidence and will be complemented by live-forward results as the
-new portfolios mature.
+| Horizon attribution | Tail-control experiment |
+|---|---|
+| ![Horizon attribution](assets/horizon_attribution.svg) | ![Tail-control diagnostics](assets/tail_control_diagnostics.svg) |
 
 ## From research to capital
 
