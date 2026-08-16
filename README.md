@@ -208,6 +208,53 @@ portfolio charts use exact daily overlapping-sleeve accounting.
 Read the [research standard](docs/RESEARCH_STANDARD.md) and
 [live validation plan](docs/LIVE_VALIDATION_PLAN.md).
 
+### Five-stream prospective monitoring pipeline
+
+The next monitoring phase separates weekday entry timing from model training. All
+five streams share the same approved model artifact for each arm, while every
+vintage keeps its own immutable decision, execution and benchmark record.
+
+```mermaid
+flowchart TD
+    A["Daily local scheduler"] --> B["NYSE calendar and actual close-time check"]
+    B --> C{"Eligible session for its weekday stream?"}
+    C -- "No" --> D["Record holiday or nonsession skip"]
+    C -- "Yes" --> E["Resolve stream and frozen monitoring registry"]
+
+    E --> F["Refresh inputs once"]
+    F --> G["Construct one current feature and eligible-universe snapshot"]
+
+    G --> H["Global model coordinator"]
+    H --> I["Load current approved h20 Ridge-return artifact"]
+    H --> J["Load current approved h40 Ridge-rank artifact"]
+    H --> K["Refit each arm once only when 130-session clock expires"]
+
+    I --> L["Score scheduled stream"]
+    J --> L
+    L --> M["Stage both arm forecasts transactionally"]
+    M --> N{"Both required arms valid?"}
+    N -- "No" --> O["Preserve failure ledger; exclude incomplete decision bundle"]
+    N -- "Yes" --> P["Freeze and register two immutable vintages"]
+
+    Q["Imported Wednesday and Friday v3 artifacts"] --> R["Read-only registry references"]
+    P --> S["Unified vintage index"]
+    R --> S
+
+    S --> T["Group by stream_id, family and horizon"]
+    T --> U["Independent stream accounting and same-window SPY"]
+    T --> V["Partial, in-progress and matured vintage outcomes"]
+    U --> W["Private five-stream dashboard"]
+    V --> W
+    W --> X["Explicit public allowlist"]
+    X --> Y["Lightweight public price marking and Pages deployment"]
+
+    S --> Z["Two-month review"]
+    Z --> AA["Week-clustered and block-bootstrap evidence"]
+    Z --> AB["Weekday and duplicate-ticker sensitivity"]
+    Z --> AC["Frozen historical percentile comparison"]
+```
+
+
 ## What this public repository intentionally excludes
 
 - source code and production configurations;
