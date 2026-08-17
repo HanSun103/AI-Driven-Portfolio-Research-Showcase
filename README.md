@@ -254,6 +254,62 @@ flowchart TD
     Z --> AC["Frozen historical percentile comparison"]
 ```
 
+The holding-period clock is now explicit: `20 sessions` and `40 sessions` mean
+completed NYSE open-to-open intervals, not calendar days or generic business
+days. The decision session does not count; entry is the next actual NYSE open;
+weekends and full-market holidays do not count; and a valid early-close session
+does count. The stock and SPY always use the same entry and maturity opens.
+
+A named weekday stream runs only when that civil weekday is an actual NYSE
+session. If the exchange is closed, that week's vintage is recorded as skipped
+and is never shifted, backfilled, or silently inserted on another weekday. An
+early close may be scored only after the actual close plus the settlement
+buffer. Missing required stock or SPY opens fail closed, and partial marks never
+enter mature horizon statistics.
+
+This also corrects a legacy expectation: generic business-day arithmetic placed
+the August 12 and August 14 seed maturities one NYSE session too early across
+Labor Day. Their immutable source files remain unchanged; the monitoring
+registry records corrected h20 maturities of September 11 and September 15,
+and h40 maturities of October 9 and October 13, 2026.
+
+The first completed interval can validate pipeline operation, but not model
+effectiveness. All five streams can be operationally checked after roughly one
+eligible week; the first h20 outcome needs about four to five calendar weeks;
+and the two-month review is still only preliminary for h20 and early-stage for
+h40. The first formal gate requires 60 mature outcomes—about 16 calendar weeks
+at five decisions per week after the maturity lag—with an effective sample size
+smaller than the raw count because vintages overlap.
+
+The current one-interval checkpoint therefore makes no profitability claim:
+there are zero mature outcomes. It records APP h20 at +1.89% active versus SPY
+and BAC h40 at -2.25% active versus SPY as diagnostics only. The legacy
+Wednesday and Friday seeds also have different model hashes, so the
+same-artifact comparison begins only after the shared model coordinator is
+deployed prospectively.
+
+### Fastest code-validation and pilot schedule
+
+This schedule is for implementation reconciliation, not accelerated proof of
+profitability. It assumes the provenance-enabled code and shared-model
+coordinator are deployed before the relevant decision close and every
+fail-closed check passes.
+
+| Date | Checkpoint | Evidence allowed |
+|---|---|---|
+| August 17, 2026, after NYSE close plus buffer | Freeze the first provenance-enabled Monday h20/h40 bundle | Exact feature, eligibility, model, configuration and calendar hashes |
+| August 18, 2026, market open | Reconcile the declared next-open entry and schedule-matched SPY prices | Entry-path and broker/data plumbing validation |
+| August 19, 2026, market open | Reconcile the first completed open-to-open interval | Provenance portion of the implementation-parity gate may pass |
+| Approximately one eligible week | Observe every weekday stream with one shared model artifact per arm | Five-stream operational gate may pass |
+| September 11, 2026 | First corrected h20 seed maturity | One complete h20 lifecycle; not profitability proof |
+| October 9, 2026 | First corrected h40 seed maturity | One complete h40 lifecycle; not profitability proof |
+
+No old forecast is backfilled with evidence that was not frozen when it was
+created. A tiny controlled execution canary may be considered only after the
+provenance, shared-model, coordinated-stream, next-open, duplicate-order, capital
+limit and kill-switch checks all pass. Broader pilot or scaling decisions remain
+subject to the predeclared performance and risk gates.
+
 
 ## What this public repository intentionally excludes
 
