@@ -22,7 +22,7 @@ CAGR.
 | **34.84%** | **23.03%** | **520** | **309** |
 | Strongest finalist | Dominant contributors unavailable | December 2013 to December 2023 | Data, model, execution and publishing |
 
-![Full backtest summary](assets/horizon_finalist_backtest.svg)
+![Full backtest summary](assets/horizon_finalist_backtest.png)
 
 The result is promising because the ranking signal survives a direct attack on
 its strongest winners. It is not yet ready to scale: its drawdown and tail
@@ -75,7 +75,7 @@ Sharpe and materially smaller drawdown.
 
 ## Does the signal survive without its best winners?
 
-![Dominant contributor stress test](assets/concentration_stress.svg)
+![Dominant contributor stress test](assets/concentration_stress.png)
 
 The exclusion test supports a ranking relationship, not a safety claim. After
 the dominant contributors were made unavailable, gross CAGR remained 23.03%,
@@ -83,7 +83,7 @@ but Sharpe fell to 0.761 and maximum drawdown remained -49.87%.
 
 ## Trade and hold, not daily replacement
 
-![Weekly overlapping sleeves](assets/overlapping_sleeves.svg)
+![Weekly overlapping sleeves](assets/overlapping_sleeves.png)
 
 The strategy makes one decision each week, enters at the declared execution
 time, and holds that sleeve until its exact exit. A 20-session strategy builds
@@ -186,11 +186,11 @@ selections and live execution records are intentionally private.
 
 | Portfolio and execution diagnostics | Signal diagnostics |
 |---|---|
-| ![Backtest and execution diagnostics](assets/backtest_diagnostics.svg) | ![Signal diagnostics](assets/signal_diagnostics.svg) |
+| ![Backtest and execution diagnostics](assets/backtest_diagnostics.png) | ![Signal diagnostics](assets/signal_diagnostics.png) |
 
 | Horizon attribution | Tail-control experiment |
 |---|---|
-| ![Horizon attribution](assets/horizon_attribution.svg) | ![Tail-control diagnostics](assets/tail_control_diagnostics.svg) |
+| ![Horizon attribution](assets/horizon_attribution.png) | ![Tail-control diagnostics](assets/tail_control_diagnostics.png) |
 
 These figures use the frozen 20-session Ridge-return finalist that produced a
 34.84% gross CAGR. Signal diagnostics use temporal out-of-sample predictions;
