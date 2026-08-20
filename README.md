@@ -196,6 +196,23 @@ These figures use the frozen 20-session Ridge-return finalist that produced a
 34.84% gross CAGR. Signal diagnostics use temporal out-of-sample predictions;
 portfolio charts use exact daily overlapping-sleeve accounting.
 
+### Model-complexity decision
+
+A nonlinear learning-to-rank challenger was evaluated under the same temporal
+validation and data-integrity controls as the linear baseline. It did not
+improve the core directional ranking evidence, so the simpler linear model was
+retained. A separate explanatory-power audit found that both models captured
+very little pooled outcome variance, while only the linear baseline preserved
+a weak positive directional relationship. The result is therefore framed as a
+small, unstable ranking edge rather than a high-accuracy return forecast. A
+higher-variance sequence architecture was not advanced because the available
+sample did not provide enough evidence that its additional complexity would
+improve reliability. This is a parsimony decision, not a claim that sequence
+models are universally ineffective.
+
+Detailed configurations, thresholds, score tables, model artifacts and
+portfolio implementation remain in the private research repository.
+
 ## From research to capital
 
 | Stage | Purpose | Promotion requirement |
