@@ -213,6 +213,22 @@ models are universally ineffective.
 Detailed configurations, thresholds, score tables, model artifacts and
 portfolio implementation remain in the private research repository.
 
+### Guardrail governance
+
+The private monitoring system also evaluates two independent diagnostic risk
+alerts. Both are currently observation-only: they preserve the frozen model
+decision and collect prospective evidence without discretionary intervention.
+
+Any future enforcement would be released only as a newly versioned,
+predeclared policy after matched historical replay, interaction testing,
+immutable provenance checks and live operational validation. Multiple alerts
+would be coordinated into one deterministic portfolio action rather than
+applied independently after a decision has been recorded.
+
+Trigger definitions, thresholds, feature groupings, replacement rules,
+performance deltas, current alerts and execution mechanics are intentionally
+excluded from this public repository.
+
 ## From research to capital
 
 | Stage | Purpose | Promotion requirement |
@@ -221,6 +237,23 @@ portfolio implementation remain in the private research repository.
 | Live-forward monitoring | Observe frozen decisions for at least two months | Signals, assumed prices, turnover, risk and accounting agree with the backtest |
 | Small pilot | Test the operational path with approximately $4,000 | Real fills, slippage, costs and interventions stay within frozen tolerances |
 | Gradual scaling | Increase capital carefully | Operational agreement continues; profit alone cannot unlock scaling |
+
+### Capacity perspective
+
+A separate liquidity review indicates that the securities selected by the
+research process have generally had enough recent trading volume for personal
+account and low-single-digit-million-dollar portfolio sizes to remain a very
+small fraction of normal market activity. At larger institutional sizes,
+historical returns cannot be scaled mechanically: participation, spread,
+slippage and market impact require an explicit execution model and prospective
+fill evidence.
+
+This establishes a **research capacity range**, not an earnings forecast or a
+capital-allocation recommendation. Any illustration based on historical CAGR
+is simple multiplication and can materially overstate future profit because it
+excludes taxes, changing liquidity, strategy decay and nonlinear market impact.
+Detailed position schedules, participation thresholds, order logic and
+instrument-level capacity measurements remain in the private repository.
 
 Read the [research standard](docs/RESEARCH_STANDARD.md) and
 [live validation plan](docs/LIVE_VALIDATION_PLAN.md).
