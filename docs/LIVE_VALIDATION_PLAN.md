@@ -17,7 +17,7 @@ Run immutable paper decisions for at least two calendar months and record:
 Two months can reveal operational disagreement and allow several outcomes to
 mature. It cannot establish long-run expected return.
 
-## Phase 2: approximately $4,000 pilot
+## Phase 2: approximately $10,000 pilot
 
 After monitoring passes, use a small amount of real capital to observe effects
 that paper accounting cannot reproduce:

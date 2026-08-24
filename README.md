@@ -152,7 +152,7 @@ flowchart TD
         CONTROLS["SPY, eligible universe,<br/>next-rank and sector-matched controls"]
         STRESS["Ticker removal, year, regime,<br/>drawdown, CVaR and cost stress tests"]
         LIVE_MONITOR["Immutable live-forward monitor<br/>signals, prices and matured outcomes"]
-        PILOT["Approximately $4,000 pilot<br/>actual fills and operational reconciliation"]
+        PILOT["Approximately $10,000 pilot<br/>actual fills and operational reconciliation"]
         SCALE["Gradual scaling gate<br/>behaviour first, profit second"]
         OUTPUT["Reports, experiment logs<br/>and sanitized research evidence"]
 
@@ -235,7 +235,7 @@ excluded from this public repository.
 |---|---|---|
 | Historical development | Find and challenge a repeatable signal | Temporal OOS controls, exact execution replay and stress tests |
 | Live-forward monitoring | Observe frozen decisions for at least two months | Signals, assumed prices, turnover, risk and accounting agree with the backtest |
-| Small pilot | Test the operational path with approximately $4,000 | Real fills, slippage, costs and interventions stay within frozen tolerances |
+| Small pilot | Test the operational path with approximately $10,000 | Real fills, slippage, costs and interventions stay within frozen tolerances |
 | Gradual scaling | Increase capital carefully | Operational agreement continues; profit alone cannot unlock scaling |
 
 ### Capacity perspective
