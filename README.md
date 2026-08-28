@@ -73,6 +73,35 @@ Net results use a declared-cost sensitivity with $1 million starting capital,
 compound faster than SPY in development, but SPY retains the strongest net
 Sharpe and materially smaller drawdown.
 
+### Calendar-year returns for the 34.84% finalist
+
+This is the annual decomposition of the exact gross, zero-cost 20-session
+Ridge-return replay behind the 34.84% CAGR headline. Raw and SPY returns are
+compounded within each calendar year. Active return is raw return minus SPY
+return, expressed in percentage points.
+
+| Calendar year | H20 raw return | SPY return | Active return |
+|---:|---:|---:|---:|
+| 2014 (Mar 11-Dec 31) | +2.48% | +12.81% | -10.33 pp |
+| 2015 | -20.16% | +6.10% | -26.27 pp |
+| 2016 | +72.49% | +11.91% | +60.59 pp |
+| 2017 | +53.27% | +21.81% | +31.45 pp |
+| 2018 | -13.92% | -5.30% | -8.62 pp |
+| 2019 | +57.32% | +30.87% | +26.45 pp |
+| 2020 | +109.98% | +12.09% | +97.88 pp |
+| 2021 | +9.50% | +29.64% | -20.14 pp |
+| 2022 | +38.07% | -18.67% | +56.74 pp |
+| 2023 | +44.57% | +27.08% | +17.48 pp |
+| 2024 | +10.51% | +25.39% | -14.89 pp |
+| 2025 | +79.85% | +17.85% | +62.00 pp |
+| 2026 (Jan 2-Mar 17) | +35.05% | -2.15% | +37.20 pp |
+
+The first and final rows are partial years. These are development-period gross
+returns before transaction costs, not live performance or an investment
+recommendation. The replay uses the historical 624-decision, top-300,
+last-open-of-week contract; it is distinct from the current top-250 weekday
+live-forward monitor.
+
 ## Does the signal survive without its best winners?
 
 ![Dominant contributor stress test](assets/concentration_stress.png)
