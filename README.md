@@ -102,6 +102,35 @@ recommendation. The replay uses the historical 624-decision, top-300,
 last-open-of-week contract; it is distinct from the current top-250 weekday
 live-forward monitor.
 
+### Additional controlled research composite
+
+An additional internally controlled development replay was evaluated over the
+same daily period. This section publishes only aggregate return and risk
+outcomes. It is not the current live-forward policy.
+
+| Calendar year | Raw return | SPY return | Active return | Maximum drawdown |
+|---:|---:|---:|---:|---:|
+| 2014 (Mar 11-Dec 31) | +13.25% | +12.81% | +0.43 pp | -11.88% |
+| 2015 | +19.14% | +6.10% | +13.04 pp | -14.80% |
+| 2016 | +72.49% | +11.91% | +60.59 pp | -11.64% |
+| 2017 | +53.27% | +21.81% | +31.45 pp | -10.53% |
+| 2018 | -2.47% | -5.30% | +2.83 pp | -22.06% |
+| 2019 | +52.96% | +30.87% | +22.09 pp | -16.33% |
+| 2020 | +109.98% | +12.09% | +97.88 pp | -41.99% |
+| 2021 | +9.50% | +29.64% | -20.14 pp | -29.79% |
+| 2022 | +25.49% | -18.67% | +44.16 pp | -30.14% |
+| 2023 | +145.94% | +27.08% | +118.85 pp | -27.64% |
+| 2024 | +10.50% | +25.39% | -14.89 pp | -49.24% |
+| 2025 | +79.85% | +17.85% | +62.00 pp | -26.22% |
+| 2026 (Jan 2-Mar 17) | +35.05% | -2.15% | +37.20 pp | -12.43% |
+
+Across all 3,023 sessions, the composite produced +10,034.73% cumulative gross
+return, 46.96% gross CAGR, 1.084 gross Sharpe, and -49.24% maximum drawdown,
+versus +339.19% cumulative return and 13.13% CAGR for SPY. Its active CAGR spread
+was +33.83 percentage points. These retrospective gross results omit some
+implementation frictions, contain two partial calendar years, and do not
+constitute prospective evidence or an investment recommendation.
+
 ## Does the signal survive without its best winners?
 
 ![Dominant contributor stress test](assets/concentration_stress.png)
