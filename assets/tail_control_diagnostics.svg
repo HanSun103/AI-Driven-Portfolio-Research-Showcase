@@ -2,7 +2,7 @@
 <title>Current finalist tail and cost diagnostics</title>
 <desc>Cost sensitivity, return distribution, worst days and implementation intensity.</desc>
 <rect width="100%" height="100%" fill="#f8fafc"/>
-<text x="36.00" y="42.00" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="23.00" font-weight="700" fill="#0f172a" text-anchor="start">20-day Ridge-return tail and implementation stress</text>
+<text x="36.00" y="42.00" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="23.00" font-weight="700" fill="#0f172a" text-anchor="start">Primary-finalist tail and implementation stress</text>
 <text x="36.00" y="68.00" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="12.00" font-weight="400" fill="#64748b" text-anchor="start">Every panel uses the same frozen sleeves; only the declared cost or tail view changes</text>
 <rect x="30.00" y="92.00" width="650.00" height="330.00" rx="14.00" fill="#ffffff" stroke="#e2e8f0" opacity="1.000"/>
 <text x="50.00" y="120.00" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="16.00" font-weight="650" fill="#0f172a" text-anchor="start">Cost-sensitivity CAGR</text>
@@ -90,7 +90,7 @@
 <text x="754.00" y="401.00" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="10.00" font-weight="400" fill="#64748b" text-anchor="start">-5.5%</text>
 <text x="1348.00" y="401.00" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="10.00" font-weight="400" fill="#64748b" text-anchor="end">6.3%</text>
 <line x1="764.00" y1="163.00" x2="782.00" y2="163.00" stroke="#3156d3" stroke-width="3.00" opacity="1.000"/>
-<text x="788.00" y="167.00" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="11.00" font-weight="400" fill="#64748b" text-anchor="start">20-day gross</text>
+<text x="788.00" y="167.00" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="11.00" font-weight="400" fill="#64748b" text-anchor="start">Primary gross</text>
 <line x1="883.00" y1="163.00" x2="901.00" y2="163.00" stroke="#d28a00" stroke-width="3.00" opacity="1.000"/>
 <text x="907.00" y="167.00" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="11.00" font-weight="400" fill="#64748b" text-anchor="start">SPY</text>
 <rect x="30.00" y="450.00" width="800.00" height="365.00" rx="14.00" fill="#ffffff" stroke="#e2e8f0" opacity="1.000"/>
@@ -110,7 +110,7 @@
 <polyline points="84.00,754.38 149.82,710.63 215.64,706.03 281.45,710.35 347.27,705.71 413.09,739.30 478.91,714.65 544.73,711.09 610.55,718.73 676.36,758.79 742.18,706.83 808.00,713.48" fill="none" stroke="#d84a5f" stroke-width="2.30" stroke-linejoin="round" stroke-linecap="round" opacity="1.000"/>
 <polyline points="84.00,594.77 149.82,566.56 215.64,581.51 281.45,646.44 347.27,679.94 413.09,559.33 478.91,585.09 544.73,633.00 610.55,558.91 676.36,573.31 742.18,531.21 808.00,571.29" fill="none" stroke="#d28a00" stroke-width="2.30" stroke-linejoin="round" stroke-linecap="round" opacity="1.000"/>
 <line x1="94.00" y1="521.00" x2="112.00" y2="521.00" stroke="#d84a5f" stroke-width="3.00" opacity="1.000"/>
-<text x="118.00" y="525.00" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="11.00" font-weight="400" fill="#64748b" text-anchor="start">20-day gross</text>
+<text x="118.00" y="525.00" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="11.00" font-weight="400" fill="#64748b" text-anchor="start">Primary gross</text>
 <line x1="213.00" y1="521.00" x2="231.00" y2="521.00" stroke="#d28a00" stroke-width="3.00" opacity="1.000"/>
 <text x="237.00" y="525.00" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="11.00" font-weight="400" fill="#64748b" text-anchor="start">SPY</text>
 <text x="84.00" y="795.00" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="8.00" font-weight="400" fill="#64748b" text-anchor="middle">2018-10</text>

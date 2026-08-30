@@ -62,7 +62,7 @@ changed the direction:
 Every portfolio below uses the same daily calendar, overlapping-sleeve
 accounting and SPY reference.
 
-| Metric | 20-session return model | 40-session rank model | SPY |
+| Metric | Primary finalist | Comparison finalist | SPY |
 |---|---:|---:|---:|
 | Gross cumulative return | 3,508.26% | 1,487.79% | 339.19% |
 | Gross CAGR | 34.84% | 25.92% | 13.13% |
@@ -83,12 +83,12 @@ Sharpe and materially smaller drawdown.
 
 ### Calendar-year returns for the 34.84% finalist
 
-This is the annual decomposition of the exact gross, zero-cost 20-session
-Ridge-return replay behind the 34.84% CAGR headline. Raw and SPY returns are
+This is the annual decomposition of the exact gross, zero-cost primary-finalist
+replay behind the 34.84% CAGR headline. Raw and SPY returns are
 compounded within each calendar year. Active return is raw return minus SPY
 return, expressed in percentage points.
 
-| Calendar year | H20 raw return | SPY return | Active return |
+| Calendar year | Primary-finalist raw return | SPY return | Active return |
 |---:|---:|---:|---:|
 | 2014 (Mar 11-Dec 31) | +2.48% | +12.81% | -10.33 pp |
 | 2015 | -20.16% | +6.10% | -26.27 pp |
@@ -168,10 +168,10 @@ but Sharpe fell to 0.761 and maximum drawdown remained -49.87%.
 ![Weekly overlapping sleeves](assets/overlapping_sleeves.png)
 
 The strategy makes one decision each week, enters at the declared execution
-time, and holds that sleeve until its exact exit. A 20-session strategy builds
-toward four concurrent weekly sleeves; a 40-session strategy builds toward
-eight. Capital is divided across active sleeve slots, so each weekly selection
-contributes without being counted as a separate fully invested portfolio.
+time, and holds that sleeve until its exact exit. Each finalist builds a ladder
+of concurrent weekly sleeves over its own predeclared holding window. Capital
+is divided across active sleeve slots, so each weekly selection contributes
+without being counted as a separate fully invested portfolio.
 
 ## Architecture
 
@@ -206,7 +206,7 @@ flowchart TD
     subgraph FEATURES["Leakage-safe research panel"]
         QUANT["Technical, cross-sectional,<br/>sector-relative and macro features"]
         SENTIMENT["Lagged sentiment, event<br/>and recency features"]
-        LABELS["Exact next-open labels<br/>20-session return and 40-session rank"]
+        LABELS["Exact next-open labels<br/>primary and comparison targets"]
         STORE["Ticker-date feature store<br/>availability and quality metadata"]
 
         PRICE_AUDIT --> QUANT --> STORE
@@ -216,15 +216,15 @@ flowchart TD
 
     subgraph MODELS["Opportunity, risk and portfolio policy"]
         TEMPORAL["Purged expanding folds<br/>fold-local preprocessing and selection"]
-        RIDGE20["20-session Ridge<br/>continuous-return head"]
-        RIDGE40["40-session Ridge<br/>cross-sectional rank head"]
+        RIDGE_PRIMARY["Primary linear finalist<br/>opportunity head"]
+        RIDGE_COMPARISON["Comparison linear finalist<br/>relative-ranking head"]
         RISK["Downside quantile, severe-loss<br/>and uncertainty diagnostics"]
         CONTROLLER["Constrained controller<br/>fixed policy remains the benchmark"]
         SLEEVES["One-stock weekly sleeves<br/>equal capital across active vintages"]
 
         STORE --> TEMPORAL
-        TEMPORAL --> RIDGE20 --> RISK
-        TEMPORAL --> RIDGE40 --> RISK
+        TEMPORAL --> RIDGE_PRIMARY --> RISK
+        TEMPORAL --> RIDGE_COMPARISON --> RISK
         RISK --> CONTROLLER --> SLEEVES
     end
 
@@ -274,7 +274,7 @@ selections and live execution records are intentionally private.
 |---|---|
 | ![Horizon attribution](assets/horizon_attribution.png) | ![Tail-control diagnostics](assets/tail_control_diagnostics.png) |
 
-These figures use the frozen 20-session Ridge-return finalist that produced a
+These figures use the frozen primary finalist that produced a
 34.84% gross CAGR. Signal diagnostics use temporal out-of-sample predictions;
 portfolio charts use exact daily overlapping-sleeve accounting.
 
@@ -357,8 +357,8 @@ flowchart TD
     F --> G["Construct one current feature and eligible-universe snapshot"]
 
     G --> H["Global model coordinator"]
-    H --> I["Load current approved h20 Ridge-return artifact"]
-    H --> J["Load current approved h40 Ridge-rank artifact"]
+    H --> I["Load current approved primary-finalist artifact"]
+    H --> J["Load current approved comparison-finalist artifact"]
     H --> K["Refit each arm once only when 130-session clock expires"]
 
     I --> L["Score scheduled stream"]
@@ -386,11 +386,12 @@ flowchart TD
     Z --> AC["Frozen historical percentile comparison"]
 ```
 
-The holding-period clock is now explicit: `20 sessions` and `40 sessions` mean
-completed NYSE open-to-open intervals, not calendar days or generic business
-days. The decision session does not count; entry is the next actual NYSE open;
-weekends and full-market holidays do not count; and a valid early-close session
-does count. The stock and SPY always use the same entry and maturity opens.
+The holding-period clock is explicit for each finalist. Holding windows use
+completed NYSE open-to-open intervals rather than calendar days or generic
+business days. The decision session does not count; entry is the next actual
+NYSE open; weekends and full-market holidays do not count; and a valid
+early-close session does count. The stock and SPY always use the same entry and
+maturity opens.
 
 A named weekday stream runs only when that civil weekday is an actual NYSE
 session. If the exchange is closed, that week's vintage is recorded as skipped
@@ -402,20 +403,23 @@ enter mature horizon statistics.
 This also corrects a legacy expectation: generic business-day arithmetic placed
 the August 12 and August 14 seed maturities one NYSE session too early across
 Labor Day. Their immutable source files remain unchanged; the monitoring
-registry records corrected h20 maturities of September 11 and September 15,
-and h40 maturities of October 9 and October 13, 2026.
+registry records corrected primary-finalist maturities of September 11 and
+September 15, and comparison-finalist maturities of October 9 and October 13,
+2026.
 
 The first completed interval can validate pipeline operation, but not model
 effectiveness. All five streams can be operationally checked after roughly one
-eligible week; the first h20 outcome needs about four to five calendar weeks;
-and the two-month review is still only preliminary for h20 and early-stage for
-h40. The first formal gate requires 60 mature outcomes—about 16 calendar weeks
+eligible week; the first primary-finalist outcome needs about four to five
+calendar weeks; and the two-month review is still only preliminary for the
+primary finalist and early-stage for the comparison finalist. The first formal
+gate requires 60 mature outcomes—about 16 calendar weeks
 at five decisions per week after the maturity lag—with an effective sample size
 smaller than the raw count because vintages overlap.
 
 The current one-interval checkpoint therefore makes no profitability claim:
-there are zero mature outcomes. It records APP h20 at +1.89% active versus SPY
-and BAC h40 at -2.25% active versus SPY as diagnostics only. The legacy
+there are zero mature outcomes. It records APP in the primary finalist at
++1.89% active versus SPY and BAC in the comparison finalist at -2.25% active
+versus SPY as diagnostics only. The legacy
 Wednesday and Friday seeds also have different model hashes, so the
 same-artifact comparison begins only after the shared model coordinator is
 deployed prospectively.
@@ -429,12 +433,12 @@ fail-closed check passes.
 
 | Date | Checkpoint | Evidence allowed |
 |---|---|---|
-| August 17, 2026, after NYSE close plus buffer | Freeze the first provenance-enabled Monday h20/h40 bundle | Exact feature, eligibility, model, configuration and calendar hashes |
+| August 17, 2026, after NYSE close plus buffer | Freeze the first provenance-enabled Monday finalist bundle | Exact feature, eligibility, model, configuration and calendar hashes |
 | August 18, 2026, market open | Reconcile the declared next-open entry and schedule-matched SPY prices | Entry-path and broker/data plumbing validation |
 | August 19, 2026, market open | Reconcile the first completed open-to-open interval | Provenance portion of the implementation-parity gate may pass |
 | Approximately one eligible week | Observe every weekday stream with one shared model artifact per arm | Five-stream operational gate may pass |
-| September 11, 2026 | First corrected h20 seed maturity | One complete h20 lifecycle; not profitability proof |
-| October 9, 2026 | First corrected h40 seed maturity | One complete h40 lifecycle; not profitability proof |
+| September 11, 2026 | First corrected primary-finalist seed maturity | One complete primary-finalist lifecycle; not profitability proof |
+| October 9, 2026 | First corrected comparison-finalist seed maturity | One complete comparison-finalist lifecycle; not profitability proof |
 
 No old forecast is backfilled with evidence that was not frozen when it was
 created. A tiny controlled execution canary may be considered only after the

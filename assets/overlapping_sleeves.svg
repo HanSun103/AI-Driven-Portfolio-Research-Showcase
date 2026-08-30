@@ -15,7 +15,7 @@
   </defs>
   <rect width="1100" height="500" rx="28" fill="url(#bg)"/>
   <text x="50" y="55" class="title">Trade and hold: weekly decisions, overlapping positions</text>
-  <text x="50" y="83" class="sub">20-session example. Each stock is held for four trading weeks; the portfolio does not switch everything each day.</text>
+  <text x="50" y="83" class="sub">Primary-finalist example. Each stock follows its declared holding window; the portfolio does not switch everything each day.</text>
 
   <g filter="url(#shadow)">
     <rect x="42" y="110" width="1016" height="282" rx="20" fill="#fff"/>
@@ -52,9 +52,9 @@
   </g>
 
   <rect x="50" y="420" width="485" height="52" rx="14" fill="#e8eeff"/>
-  <text x="70" y="442" class="note">20 sessions: four equal-capital sleeve slots</text>
+  <text x="70" y="442" class="note">Primary finalist: equal-capital sleeve slots</text>
   <text x="70" y="461" class="small">After ramp-up, one sleeve enters as the oldest exits.</text>
   <rect x="565" y="420" width="485" height="52" rx="14" fill="#e2f6f2"/>
-  <text x="585" y="442" class="note">40 sessions: eight equal-capital sleeve slots</text>
-  <text x="585" y="461" class="small">The same weekly process, with an eight-week exact hold.</text>
+  <text x="585" y="442" class="note">Comparison finalist: equal-capital sleeve slots</text>
+  <text x="585" y="461" class="small">The same weekly process under its declared holding window.</text>
 </svg>

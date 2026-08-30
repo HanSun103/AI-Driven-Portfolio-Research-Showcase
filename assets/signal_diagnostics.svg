@@ -2,7 +2,7 @@
 <title>Current finalist signal diagnostics</title>
 <desc>Out-of-sample IC, score buckets and highest-score candidate returns.</desc>
 <rect width="100%" height="100%" fill="#f8fafc"/>
-<text x="36.00" y="42.00" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="23.00" font-weight="700" fill="#0f172a" text-anchor="start">20-day Ridge-return signal diagnostics</text>
+<text x="36.00" y="42.00" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="23.00" font-weight="700" fill="#0f172a" text-anchor="start">Primary-finalist signal diagnostics</text>
 <text x="36.00" y="68.00" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="12.00" font-weight="400" fill="#64748b" text-anchor="start">186,048 temporal OOS scores across 624 decisions; overlapping forward labels are never compounded</text>
 <rect x="30.00" y="92.00" width="850.00" height="330.00" rx="14.00" fill="#ffffff" stroke="#e2e8f0" opacity="1.000"/>
 <text x="50.00" y="120.00" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="16.00" font-weight="650" fill="#0f172a" text-anchor="start">Rank information coefficient</text>
@@ -66,7 +66,7 @@
 <text x="1332.85" y="402.00" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="9.00" font-weight="400" fill="#64748b" text-anchor="middle">2026</text>
 <rect x="30.00" y="450.00" width="650.00" height="365.00" rx="14.00" fill="#ffffff" stroke="#e2e8f0" opacity="1.000"/>
 <text x="50.00" y="478.00" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="16.00" font-weight="650" fill="#0f172a" text-anchor="start">Score-bucket return</text>
-<text x="50.00" y="498.00" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="11.00" font-weight="400" fill="#64748b" text-anchor="start">Mean realized 20-session return; decision-level diagnostic</text>
+<text x="50.00" y="498.00" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="11.00" font-weight="400" fill="#64748b" text-anchor="start">Mean realized holding-window return; decision-level diagnostic</text>
 <line x1="84.00" y1="777.00" x2="658.00" y2="777.00" stroke="#e2e8f0" stroke-width="1.00" opacity="1.000"/>
 <text x="76.00" y="781.00" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="10.00" font-weight="400" fill="#64748b" text-anchor="end">0.0%</text>
 <line x1="84.00" y1="711.00" x2="658.00" y2="711.00" stroke="#e2e8f0" stroke-width="1.00" opacity="1.000"/>
@@ -89,7 +89,7 @@
 <text x="600.60" y="795.00" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="9.00" font-weight="400" fill="#64748b" text-anchor="middle">Top</text>
 <rect x="700.00" y="450.00" width="670.00" height="365.00" rx="14.00" fill="#ffffff" stroke="#e2e8f0" opacity="1.000"/>
 <text x="720.00" y="478.00" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="16.00" font-weight="650" fill="#0f172a" text-anchor="start">Highest-score candidates</text>
-<text x="720.00" y="498.00" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="11.00" font-weight="400" fill="#64748b" text-anchor="start">Mean 20-session return by predicted rank</text>
+<text x="720.00" y="498.00" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="11.00" font-weight="400" fill="#64748b" text-anchor="start">Mean holding-window return by predicted rank</text>
 <line x1="754.00" y1="777.00" x2="1348.00" y2="777.00" stroke="#e2e8f0" stroke-width="1.00" opacity="1.000"/>
 <text x="746.00" y="781.00" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="10.00" font-weight="400" fill="#64748b" text-anchor="end">-0.1%</text>
 <line x1="754.00" y1="711.00" x2="1348.00" y2="711.00" stroke="#e2e8f0" stroke-width="1.00" opacity="1.000"/>
