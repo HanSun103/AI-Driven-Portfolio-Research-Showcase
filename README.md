@@ -8,26 +8,34 @@
 ![Research period](https://img.shields.io/badge/development_period-2013--2023-3157d5)
 ![Validation](https://img.shields.io/badge/validation-309_tests-0f9f8d)
 
-## The result that moved the project forward
+## Stronger aggregate results, unresolved tail risk
 
-The current research candidate opens one new stock sleeve each week and holds
-each selection for an exact horizon. In the corrected ten-year development
-replay, the strongest candidate produced a 34.84% gross CAGR. When its three
-largest historical contributors were excluded before selection, the frozen
-model chose the next eligible candidates and still produced a 23.03% gross
-CAGR.
+The latest controlled development composite produced a 46.96% gross annual
+growth rate across 3,023 sessions. Its Sharpe ratio was 1.084, its Sortino ratio
+was 1.891, and its profit factor was 1.259. Internal annualized turnover also
+declined from 32.06 times account value in the original finalist to 29.01 times
+in the composite.
 
-| Development CAGR | Ex-ante exclusion CAGR | Weekly OOS decisions | Automated checks |
-|---:|---:|---:|---:|
-| **34.84%** | **23.03%** | **520** | **309** |
-| Strongest finalist | Dominant contributors unavailable | December 2013 to December 2023 | Data, model, execution and publishing |
+| Development measure | Original finalist | Controlled composite |
+|---|---:|---:|
+| Gross CAGR | 34.84% | **46.96%** |
+| Sharpe ratio | 0.864 | **1.084** |
+| Sortino ratio | 1.482 | **1.891** |
+| Profit factor | 1.200 | **1.259** |
+| Internal annualized turnover | 32.06 times | **29.01 times** |
+| Maximum drawdown | -49.24% | **-49.24%** |
 
-![Full backtest summary](assets/horizon_finalist_backtest.png)
+The advantage remained stable when the strongest sessions were removed from
+the return calculation. With the best session assigned a zero return, the
+composite retained an 11.82 percentage point CAGR advantage. The advantage was
+11.54 percentage points after the best three sessions were neutralized and
+11.78 percentage points after the best five were neutralized.
 
-The result is promising because the ranking signal survives a direct attack on
-its strongest winners. It is not yet ready to scale: its drawdown and tail
-losses remain larger than SPY. The project has therefore moved from historical
-development to live-forward monitoring.
+This robustness is encouraging, but the persistent maximum drawdown of roughly
+49% remains unacceptable for capital deployment. The composite is a
+retrospective development result, not prospective evidence. The project
+therefore remains in live-forward monitoring while concentration and tail-risk
+controls are evaluated.
 
 ## How the project evolved
 
@@ -130,6 +138,22 @@ versus +339.19% cumulative return and 13.13% CAGR for SPY. Its active CAGR sprea
 was +33.83 percentage points. These retrospective gross results omit some
 implementation frictions, contain two partial calendar years, and do not
 constitute prospective evidence or an investment recommendation.
+
+The composite also produced a 1.891 Sortino ratio and a 1.259 profit factor.
+Internal annualized turnover was 29.01 times account value, compared with 32.06
+times for the original finalist. A best-session sensitivity check produced the
+following results:
+
+| Best-session sensitivity | Original CAGR | Composite CAGR | Composite advantage |
+|---|---:|---:|---:|
+| Full return history | 34.84% | **46.96%** | **12.12 percentage points** |
+| Best session set to zero | 31.48% | **43.30%** | **11.82 percentage points** |
+| Best three sessions set to zero | 25.72% | **37.26%** | **11.54 percentage points** |
+| Best five sessions set to zero | 21.02% | **32.80%** | **11.78 percentage points** |
+
+The similar advantage across all four rows indicates that the aggregate result
+does not depend on one or two exceptional sessions. It does not establish
+safety: the approximately 49% drawdown remains the dominant unresolved result.
 
 ## Does the signal survive without its best winners?
 
