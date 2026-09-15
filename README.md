@@ -39,6 +39,14 @@ controls are evaluated.
 
 ## How the project evolved
 
+### September 15 paper-evidence checkpoint
+
+Two completed baseline paper cohorts returned **+3.12%** and **+3.29%** gross,
+outperforming their matched SPY windows by **4.43** and **5.35 percentage points**.
+They overlap and use different model vintages; these early outcomes do not
+establish persistent effectiveness or deployment readiness.
+[Read the completed-outcome review](docs/MATURED_EVIDENCE_2026-09-15.md).
+
 The first version combined return prediction, technical indicators, sentiment,
 portfolio optimization and pair trading. Successively stricter experiments
 changed the direction:
