@@ -1,5 +1,8 @@
 # AI-Driven Stock Selection Research Showcase
 
+[Daily research news collection](docs/DAILY_NEWS_COLLECTION.md): lightweight
+GitHub Actions fetching with encrypted archives; processing remains local.
+
 > Can a machine-learning model identify future stock-market winners without
 > relying on one lucky ticker, one favourable period, or a backtest assumption
 > that disappears in live operation?
