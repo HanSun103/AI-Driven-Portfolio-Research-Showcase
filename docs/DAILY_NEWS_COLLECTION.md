@@ -19,6 +19,8 @@ local. No trading or model-training step runs here.
   recovery attempts. This leaves 20 of the Developer plan's stated daily 100
   for other callers; other clients must respect that shared account allowance.
 - Retry incomplete windows at most three times, at least six hours apart.
+  Three consecutive transport failures stop a run. Manual `probe=true` may
+  bypass the time backoff for just one request; quota and attempt limits remain.
   Current newly reachable windows take priority. Gaps older than 28 days are
   counted as expired; they are never silently called complete.
 - Truncated, failed, invalid and exhausted-retry windows remain unresolved.

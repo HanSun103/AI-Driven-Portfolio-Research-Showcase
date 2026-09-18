@@ -80,8 +80,20 @@ class CollectorTests(unittest.TestCase):
         self.assertEqual(len(state['pending']),48)
 
     def test_provider_error_never_counts_complete(self):
-        state,_=c.collect(self.state,NOW,'fake',self.key,lambda w,k:dict(status='error',code='network_or_parse_error'))
+        state,batch=c.collect(self.state,NOW,'fake',self.key,lambda w,k:dict(status='error',code='network_or_parse_error'))
         self.assertEqual(len(state['pending']),48)
+        self.assertEqual(batch['requests'],3)
+
+    def test_diagnostic_probe_preserves_quota_and_bounds_calls(self):
+        for window in self.state['pending']:
+            window['attempts']=1
+            window['last_attempt']=c.iso(NOW)
+        state,batch=c.collect(self.state,NOW,'fake',self.key,self.empty,probe=True)
+        self.assertEqual(batch['requests'],1)
+        self.assertEqual(len(state['pending']),47)
+        state['reserved']=0
+        _,batch=c.collect(state,NOW,'fake',self.key,self.empty,probe=True)
+        self.assertEqual(batch['requests'],0)
 
     def test_raw_payload_and_first_seen_preserved(self):
         def request(w,k):

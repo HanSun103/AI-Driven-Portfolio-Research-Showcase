@@ -14,6 +14,10 @@ on:
         description: Initialize the first 48-hour archive only if no saved state exists
         type: boolean
         default: false
+      probe:
+        description: Retry at most one pending window now for diagnosis; preserve quota and attempt limits
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -65,7 +69,13 @@ jobs:
         env:
           NEWSAPI_KEY: ${{ secrets.NEWSAPI_KEY }}
           NEWS_ARCHIVE_KEY: ${{ secrets.NEWS_ARCHIVE_KEY }}
-        run: python -B automation/newsapi_fetch.py collect
+          PROBE: ${{ inputs.probe }}
+        run: |
+          if [ "$PROBE" = 'true' ]; then
+            python -B automation/newsapi_fetch.py collect --probe
+          else
+            python -B automation/newsapi_fetch.py collect
+          fi
       - name: Persist encrypted batch before advancing state
         if: github.event_name == 'schedule' || inputs.dry_run == false
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4

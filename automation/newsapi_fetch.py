@@ -146,26 +146,29 @@ def fetch(window, api_key):
         allowed = {"rateLimited", "apiKeyExhausted", "apiKeyInvalid", "apiKeyDisabled",
                    "parameterInvalid", "maximumResultsReached", "parameterMissing"}
         return dict(status="error", code=code if code in allowed else "http_error", http_status=exc.code)
-    except Exception:
-        return dict(status="error", code="network_or_parse_error")
+    except Exception as exc:
+        return dict(status="error", code="network_or_parse_error", error_type=type(exc).__name__,
+                    reason_type=type(getattr(exc, "reason", None)).__name__)
 
 
-def collect(state, now, api_key, key, request=fetch):
+def collect(state, now, api_key, key, request=fetch, probe=False):
     # Current 24 hours of newly reachable news first; older recovery second.
     end = cutoff(now)
     eligible = [w for w in state["pending"] if w.get("attempts", 0) < 3 and
-                (not w.get("last_attempt") or dt(w["last_attempt"]) <= now-timedelta(hours=6))]
+                (probe or not w.get("last_attempt") or dt(w["last_attempt"]) <= now-timedelta(hours=6))]
     recent = sorted([w for w in eligible if dt(w["start"]) >= end-timedelta(hours=24)], key=lambda w:w["start"])
     older = sorted([w for w in eligible if dt(w["start"]) < end-timedelta(hours=24)], key=lambda w:w["start"])
     batch = dict(version=1, repository=REPO, run_id=state["current_run"], commit=os.getenv("GITHUB_SHA"),
                  query=QUERY, collection_started_at=iso(now), windows=[], expired_windows=state["expired_windows"])
     used = 0
+    consecutive_transport_errors = 0
     complete = set()
-    for window in (recent+older)[:state["reserved"]]:
+    for window in (recent+older)[:min(state["reserved"], 1) if probe else state["reserved"]]:
         used += 1
         window["attempts"] += 1
         window["last_attempt"] = iso(now)
         response = request(window, api_key)
+        consecutive_transport_errors = consecutive_transport_errors+1 if response.get("code") == "network_or_parse_error" else 0
         articles = response.get("articles")
         total = response.get("totalResults")
         valid = response.get("status") == "ok" and isinstance(articles, list) and isinstance(total, int) and total >= 0
@@ -188,6 +191,8 @@ def collect(state, now, api_key, key, request=fetch):
         # Bounded one-page windows; never evade paid-page restrictions or change query.
         if response.get("code") in {"rateLimited", "apiKeyExhausted", "apiKeyInvalid", "apiKeyDisabled"} or response.get("http_status") in {401,403,429}:
             break
+        if consecutive_transport_errors >= 3:
+            break
         # Bound storage; keep the response that crossed the threshold, then stop fetching.
         if len(seal(batch, key)) >= MAX_ARCHIVE_BYTES or len(json.dumps(batch, ensure_ascii=False).encode()) >= 24_000_000:
             break
@@ -204,6 +209,7 @@ def main():
     parser=argparse.ArgumentParser()
     parser.add_argument("stage", choices=["prepare","collect","status"])
     parser.add_argument("--bootstrap", action="store_true")
+    parser.add_argument("--probe", action="store_true", help="Retry at most one pending window; quota and attempt limits still apply")
     parser.add_argument("--out", default="private/run")
     args=parser.parse_args()
     out=Path(args.out);out.mkdir(parents=True,exist_ok=True)
@@ -223,7 +229,7 @@ def main():
         (out/"reserved/state.enc").write_bytes(seal(state,key))
     elif args.stage=="collect":
         state=unseal((out/"reserved/state.enc").read_bytes(),key)
-        state,batch=collect(state,datetime.now(UTC),os.environ["NEWSAPI_KEY"],key)
+        state,batch=collect(state,datetime.now(UTC),os.environ["NEWSAPI_KEY"],key,probe=args.probe)
         # Batch must be uploaded before the final state advances past completed windows.
         (out/"batch.enc").write_bytes(seal(batch,key))
         (out/"final").mkdir(exist_ok=True)
