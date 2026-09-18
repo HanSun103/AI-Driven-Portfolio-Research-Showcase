@@ -30,6 +30,15 @@ class NoRedirect(urllib.request.HTTPRedirectHandler):
         return None
 
 
+def provider_key():
+    # Secret-entry forms can retain a final newline. Strip surrounding
+    # whitespace, then fail before network access if internal controls remain.
+    value = os.environ.get("NEWSAPI_KEY", "").strip()
+    if not value or any(ord(c) < 33 or ord(c) > 126 for c in value):
+        raise ValueError("newsapi_secret_invalid_format")
+    return value
+
+
 def iso(value):
     return value.astimezone(UTC).isoformat()
 
@@ -78,7 +87,8 @@ def restore(key, artifacts, bootstrap):
         if bootstrap:
             return None
         raise RuntimeError("state_missing_manual_bootstrap_required")
-    latest = max(states, key=lambda a: int(a["id"]))
+    # Artifact IDs are not chronological across GitHub storage shards.
+    latest = max(states, key=lambda a: (dt(a["created_at"]), a["name"].endswith("-final"), int(a["id"])))
     if latest["expired"]:
         raise RuntimeError("latest_state_expired")
     raw = gh_bytes(f"repos/{REPO}/actions/artifacts/{latest['id']}/zip")
@@ -216,8 +226,7 @@ def main():
     key=os.environ.get("NEWS_ARCHIVE_KEY", "").encode()
     Fernet(key)  # Fail closed before any external request when missing/invalid.
     if args.stage=="prepare":
-        if not os.environ.get("NEWSAPI_KEY"):
-            raise RuntimeError("newsapi_secret_missing")
+        provider_key()
         artifacts=artifact_list()
         retained=sum(a["size_in_bytes"] for a in artifacts if not a["expired"])
         if retained > 400_000_000:
@@ -229,7 +238,7 @@ def main():
         (out/"reserved/state.enc").write_bytes(seal(state,key))
     elif args.stage=="collect":
         state=unseal((out/"reserved/state.enc").read_bytes(),key)
-        state,batch=collect(state,datetime.now(UTC),os.environ["NEWSAPI_KEY"],key,probe=args.probe)
+        state,batch=collect(state,datetime.now(UTC),provider_key(),key,probe=args.probe)
         # Batch must be uploaded before the final state advances past completed windows.
         (out/"batch.enc").write_bytes(seal(batch,key))
         (out/"final").mkdir(exist_ok=True)

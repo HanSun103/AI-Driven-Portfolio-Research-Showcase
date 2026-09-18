@@ -1,10 +1,13 @@
 import copy
 from datetime import datetime, timedelta, timezone
 import importlib.util
+import io
+import os
 from pathlib import Path
 import unittest
 from unittest.mock import patch
 import urllib.request
+import zipfile
 
 from cryptography.fernet import Fernet, InvalidToken
 
@@ -121,8 +124,24 @@ class CollectorTests(unittest.TestCase):
 
     def test_no_fallback_from_newest_expired_state(self):
         with self.assertRaises(RuntimeError):
-            c.restore(self.key,[dict(id=1,name='newsapi-state-a',expired=False),
-                               dict(id=2,name='newsapi-state-b',expired=True)],True)
+            c.restore(self.key,[dict(id=99,name='newsapi-state-a',expired=False,created_at=c.iso(NOW)),
+                               dict(id=2,name='newsapi-state-b',expired=True,created_at=c.iso(NOW+timedelta(minutes=1)))],True)
+
+    def test_newest_artifact_selected_by_time_not_id(self):
+        payload=io.BytesIO()
+        with zipfile.ZipFile(payload,'w') as z:
+            z.writestr('state.enc',c.seal(self.state,self.key))
+        artifacts=[dict(id=99,name='newsapi-state-old-final',expired=False,created_at=c.iso(NOW)),
+                   dict(id=2,name='newsapi-state-new-final',expired=False,created_at=c.iso(NOW+timedelta(minutes=1)))]
+        with patch.object(c,'gh_bytes',return_value=payload.getvalue()) as get:
+            c.restore(self.key,artifacts,False)
+        self.assertTrue(get.call_args.args[0].endswith('/2/zip'))
+
+    def test_secret_whitespace_normalized_without_accepting_internal_controls(self):
+        with patch.dict(os.environ, {'NEWSAPI_KEY':' fake-key\r\n'}):
+            self.assertEqual(c.provider_key(),'fake-key')
+        with patch.dict(os.environ, {'NEWSAPI_KEY':'fake\nkey'}):
+            with self.assertRaises(ValueError): c.provider_key()
 
     def test_daily_budget_and_retry_backoff(self):
         state,batch=c.collect(self.state,NOW,'fake',self.key,
