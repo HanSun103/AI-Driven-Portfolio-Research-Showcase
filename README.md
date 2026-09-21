@@ -42,13 +42,29 @@ controls are evaluated.
 
 ## How the project evolved
 
-### September 15 paper-evidence checkpoint
+### Five completed paper outcomes through September 18
 
-Two completed baseline paper cohorts returned **+3.12%** and **+3.29%** gross,
-outperforming their matched SPY windows by **4.43** and **5.35 percentage points**.
-They overlap and use different model vintages; these early outcomes do not
-establish persistent effectiveness or deployment readiness.
-[Read the completed-outcome review](docs/MATURED_EVIDENCE_2026-09-15.md).
+Refreshed September 21, 2026. This checkpoint reports the first five completed
+baseline paper cohorts only; subsequent cohorts are outside this update.
+
+| Completed cohort | Price return | Matched SPY return | Active return |
+|---|---:|---:|---:|
+| A | +3.12% | -1.31% | +4.43 pp |
+| B | +3.29% | -2.07% | +5.35 pp |
+| C | +1.75% | -1.20% | +2.95 pp |
+| D | -2.55% | -0.94% | -1.62 pp |
+| E | -3.38% | -0.61% | -2.77 pp |
+
+Returns use Yahoo raw, unadjusted opening prices over each completed window,
+with SPY measured over the identical interval. They exclude dividends, fees
+and slippage and are paper observations, not broker fills or total returns.
+Tiingo was also checked; small opening-price differences remain, so this is
+not an assertion of exact agreement between providers.
+
+Three of the five cohorts had positive price returns and outperformed SPY.
+The observations overlap and span two baseline model vintages; they are not
+five independent trials, a compounded account return, or evidence that the
+current candidate model is ready for promotion.
 
 The first version combined return prediction, technical indicators, sentiment,
 portfolio optimization and pair trading. Successively stricter experiments
@@ -427,13 +443,11 @@ gate requires 60 mature outcomes—about 16 calendar weeks
 at five decisions per week after the maturity lag—with an effective sample size
 smaller than the raw count because vintages overlap.
 
-The current one-interval checkpoint therefore makes no profitability claim:
-there are zero mature outcomes. It records APP in the primary finalist at
-+1.89% active versus SPY and BAC in the comparison finalist at -2.25% active
-versus SPY as diagnostics only. The legacy
-Wednesday and Friday seeds also have different model hashes, so the
-same-artifact comparison begins only after the shared model coordinator is
-deployed prospectively.
+The first-five completed paper checkpoint above supersedes the earlier
+one-interval diagnostics. It contains three positive and two negative outcomes;
+the earlier partial marks are not mature results. Overlapping windows and
+mixed baseline vintages prevent treating these observations as independent
+tests of one unchanged artifact. No promotion follows from this update.
 
 ### Fastest code-validation and pilot schedule
 
