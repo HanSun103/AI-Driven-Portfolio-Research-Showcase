@@ -1,0 +1,47 @@
+name: Deploy Signal Desk
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'signals/dashboard/**'
+      - '.github/workflows/deploy-signal-desk.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: signal-desk-pages
+  cancel-in-progress: true
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - name: Validate static artifact boundary
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json, re
+          root = Path('signals/dashboard')
+          assert {p.name for p in root.iterdir()} == {'index.html','app.js','style.css','snapshot.json','icon.svg'}
+          for p in root.iterdir():
+              assert p.is_file() and p.stat().st_size < 500000
+              assert not re.search(r'(?i)((?<![a-z])[a-z]:[\\/]|\.joblib|api[_-]?key|bearer\s|feature_count|model_params|sample_weight)', p.read_text())
+          data = json.loads((root/'snapshot.json').read_text())
+          assert data['schema_version'] == 1
+          PY
+          node --check signals/dashboard/app.js
+      - uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5
+        with:
+          path: signals/dashboard
+      - id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5
