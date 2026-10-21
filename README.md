@@ -11,6 +11,17 @@ GitHub Actions fetching with encrypted archives; processing remains local.
 ![Research period](https://img.shields.io/badge/development_period-2013--2023-3157d5)
 ![Validation](https://img.shields.io/badge/validation-309_tests-0f9f8d)
 
+## Daily Signal Desk
+
+[Open the dashboard](https://hansun103.github.io/AI-Driven-Portfolio-Research-Showcase/)
+for dated daily selections and the browsable paper-observation archive.
+The dashboard labels the owner's current production version **Primary finalist**.
+It is a separate version from the historical primary finalist and controlled
+composite discussed below; their backtest metrics must not be attributed to
+this current version. Outcomes are separated by model, vintage and horizon.
+Daily observations do not imply daily purchases, and paper returns are not
+brokerage fills. Only sanitized outputs are shared; model design remains private.
+
 ## Stronger aggregate results, unresolved tail risk
 
 The latest controlled development composite produced a 46.96% gross annual
@@ -288,8 +299,8 @@ flowchart TD
 | Execution replay | Apply exact entry timing, overlapping sleeves, costs, cash and schedule-matched SPY |
 | Monitoring and evidence | Preserve immutable forecasts, mature outcomes without look-ahead and publish sanitized diagnostics |
 
-The implementation, production configuration, trained models, data, current
-selections and live execution records are intentionally private.
+The implementation, production configuration, trained models, underlying data and live execution records are intentionally
+private. Dated selections are now shared through the Signal Desk above.
 
 ## Evidence gallery
 
