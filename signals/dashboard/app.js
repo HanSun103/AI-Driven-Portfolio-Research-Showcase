@@ -16,7 +16,17 @@ function checkFeed(feed){
     if(!Number.isFinite(Date.parse(r.entry_open))||!Number.isFinite(Date.parse(r.expires_at)))throw Error("Missing timing");
   }
 }
-function observations(){return data.archive?.rows||[];}
+// Retired dashboard track. Keep source receipts intact; apply this to every display.
+function observations(){return (data.archive?.rows||[]).filter(r=>r.id!=="legacy");}
+function displayedSummary(){
+  const rows=observations(), forward=rows.filter(r=>r.evidence==="forward");
+  return {observations:rows.length,forward:forward.length,
+    late_diagnostic:rows.filter(r=>r.evidence==="late_diagnostic").length,
+    timestamp_unverified:rows.filter(r=>r.evidence==="timestamp_unverified").length,
+    matured_forward:forward.filter(r=>r.status==="matured").length,
+    pending_forward:forward.filter(r=>["holding","awaiting_entry"].includes(r.status)).length,
+    missing_prices_forward:forward.filter(r=>r.status==="missing_prices").length};
+}
 function allDates(){return [...new Set([...data.runs.map(r=>r.date),...observations().map(r=>r.date)])].sort().reverse();}
 function historyRun(day){
   const rows=observations().filter(r=>r.date===day);if(!rows.length)return null;
@@ -48,7 +58,7 @@ function render(){
     card.append(label,el("div",m?.ticker||"—","horizon-ticker"),dates);$("#horizon-cards").append(card);
   }
   $("#research-body").replaceChildren();
-  for(const [id,label,status] of [["research-a","Research model A","Not ready for use"],["control","Comparison control","Evaluation only"],["legacy","Legacy baseline","Not preferred"],["paper-baseline","Earlier baseline","Historical vintages"]]){
+  for(const [id,label,status] of [["research-a","Research model A","Not ready for use"],["control","Comparison control","Evaluation only"],["paper-baseline","Earlier baseline","Historical vintages"]]){
     const tr=el("tr");tr.append(el("td",label),el("td",status));for(const h of [20,40])tr.append(el("td",r.picks.find(x=>x.id===id&&x.horizon===h)?.ticker||"Not recorded"));$("#research-body").append(tr);
   }
   $("#quality").textContent=r.historical_only?"Recovered earlier saved observations. Their original input policies and validation coverage differ; this archive does not retroactively certify today’s gates.":`This run passed its input and membership gates. Range warnings: ${r.range_warnings}. Selection alerts: ${r.guardrail_warnings}. Auxiliary eligibility filter: ${r.eligibility_filter_active?"active":"inactive"}. These are operational facts, not proof of predictive performance.`;
@@ -62,7 +72,7 @@ function fillOptions(id, items){
 }
 function setupArchive(){
   const rows=observations();
-  fillOptions("#outcome-model",[["all","All model versions"],...[...new Map(rows.map(r=>[r.id,r.name])).entries()]]);
+  fillOptions("#outcome-model",[["all","All displayed models"],...[...new Map(rows.map(r=>[r.id,r.name])).entries()]]);
   fillOptions("#outcome-month",[["all","All months"],...[...new Set(rows.map(r=>r.entry.slice(0,7)))].sort().reverse().map(m=>[m,m])]);
   fillOptions("#decision-month",[["all","All dates"],...[...new Set(allDates().map(d=>d.slice(0,7)))].map(m=>[m,m])]);
   $("#history-count").textContent=`· ${allDates().length} dates`;
@@ -84,7 +94,8 @@ function renderDecisions(){
 function renderEvidence(){
   const a=data.archive,body=$("#outcomes");body.replaceChildren();if(!a){$("#outcome-summary").textContent="Archive unavailable";return;}
   const selected={};for(const k of ["model","horizon","month","status","evidence","limit"])selected[k]=$("#outcome-"+k).value;
-  const rows=a.rows.filter(r=>(selected.model==="all"||r.id===selected.model)&&(selected.horizon==="all"||String(r.horizon)===selected.horizon)&&(selected.month==="all"||r.entry.startsWith(selected.month))&&(selected.status==="all"||r.status===selected.status)&&(selected.evidence==="all"||r.evidence===selected.evidence))
+  const summary=displayedSummary();
+  const rows=observations().filter(r=>(selected.model==="all"||r.id===selected.model)&&(selected.horizon==="all"||String(r.horizon)===selected.horizon)&&(selected.month==="all"||r.entry.startsWith(selected.month))&&(selected.status==="all"||r.status===selected.status)&&(selected.evidence==="all"||r.evidence===selected.evidence))
     .sort((a,b)=>b.exit.localeCompare(a.exit)||b.date.localeCompare(a.date)||a.name.localeCompare(b.name));
   const visible=selected.limit==="all"?rows:rows.slice(0,Number(selected.limit));
   const status={matured:"Matured",holding:"Still holding",awaiting_entry:"Awaiting entry",missing_prices:"Price verification missing"};
@@ -97,12 +108,12 @@ function renderEvidence(){
   }
   if(!visible.length){const tr=el("tr"),td=el("td","No observations match these filters. Pending outcomes are not zero returns.");td.colSpan=7;tr.append(td);body.append(tr);}
   $("#outcome-caption").textContent=selected.status==="matured"?"Latest matured observations first":"Sorted by planned maturity, newest first · pending values remain blank";
-  $("#outcome-summary").textContent=`Showing ${visible.length} of ${rows.length} matching observations · ${a.summary.matured_forward} matured forward observations across the full archive.`;
+  $("#outcome-summary").textContent=`Showing ${visible.length} of ${rows.length} matching observations · ${summary.matured_forward} matured forward observations across displayed models.`;
   $("#outcome-cutoff").textContent=`OUTCOMES THROUGH ${dateLabel(a.as_of).toUpperCase()}`;
-  const primary=a.rows.filter(r=>r.id==="baseline"&&r.evidence==="forward");const matured=primary.filter(r=>r.status==="matured");
+  const primary=observations().filter(r=>r.id==="baseline"&&r.evidence==="forward");const matured=primary.filter(r=>r.status==="matured");
   const next=primary.filter(r=>r.status!=="matured").map(r=>r.exit).sort()[0];
   $("#primary-maturity").textContent=`Current production version: ${matured.length} matured forward observations${next?`; next scheduled maturity ${dateLabel(next)}`:""}. Earlier models’ results are not its track record.`;
-  $("#archive-coverage").textContent=`Recovered ${a.summary.observations} observations: ${a.summary.forward} recorded before entry, ${a.summary.late_diagnostic} late diagnostics, ${a.summary.timestamp_unverified} with unverified timing. Forward outcomes: ${a.summary.matured_forward} matured, ${a.summary.pending_forward} pending, ${a.summary.missing_prices_forward} missing prices. Repeated revisions are not counted as additional trades. Historical public availability is not implied.`;
+  $("#archive-coverage").textContent=`Displaying ${summary.observations} observations: ${summary.forward} recorded before entry, ${summary.late_diagnostic} late diagnostics, ${summary.timestamp_unverified} with unverified timing. Forward outcomes: ${summary.matured_forward} matured, ${summary.pending_forward} pending, ${summary.missing_prices_forward} missing prices. Repeated revisions are not counted as additional trades. Historical public availability is not implied.`;
 }
 function renderPerformance(){
   $("#performance-rows").replaceChildren();const groups=new Map();
