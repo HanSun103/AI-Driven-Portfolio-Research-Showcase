@@ -11,6 +11,16 @@ GitHub Actions fetching with encrypted archives; processing remains local.
 ![Research period](https://img.shields.io/badge/development_period-2013--2023-3157d5)
 ![Validation](https://img.shields.io/badge/validation-309_tests-0f9f8d)
 
+## Paper monitoring — October 23, 2026
+
+The current Primary finalist has its first matured H20 paper observation: **+12.30%**, versus **−1.16% for SPY**, before costs. Most observations remain open; this is not evidence of reliable outperformance.
+
+[Read the aggregate monitoring update and chart](docs/monitoring/2026-10-23/README.md), including separate matured results and limitations. No model implementation or private account information is published.
+
+![October 23 paper-monitoring snapshot](docs/monitoring/2026-10-23/paper_marks.png)
+
+*Most observations remain open. Arithmetic mean marks are not portfolio returns; [the report](docs/monitoring/2026-10-23/README.md) separates the completed outcomes.*
+
 ## Daily Signal Desk
 
 [Open the dashboard](https://hansun103.github.io/AI-Driven-Portfolio-Research-Showcase/)
